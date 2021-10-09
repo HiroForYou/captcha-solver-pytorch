@@ -3,6 +3,7 @@ torch==1.9.1+cpu
 torchvision==0.10.1+cpu
 Pillow==7.2.0
 albumentations==0.5.2
+fastapi==0.68.1
 numpy==1.19.5
 tqdm==4.48.0
 scikit-learn==0.24.0
