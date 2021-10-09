@@ -7,3 +7,6 @@ numpy==1.19.5
 tqdm==4.48.0
 scikit-learn==0.24.0
 glob2
+gunicorn
+uvicorn==0.15.0
+python-multipart
