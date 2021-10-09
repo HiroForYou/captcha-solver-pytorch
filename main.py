@@ -32,9 +32,6 @@ app.add_middleware(
 
 filename_encoder = "encoder.pkl"
 encoder_model = pickle.load(open(filename_encoder, "rb"))
-model = CaptchaModel(NRO_CHARS)
-model.load_state_dict(torch.load("./model.bin", map_location="cpu"))
-model.eval().to("cpu")
 
 transform = transforms.Compose(
     [
