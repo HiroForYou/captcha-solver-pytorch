@@ -33,8 +33,7 @@ Después de logearse, proceda a clonar el siguiente repositorio:
 heroku git:clone -a captcha-pytorch
 ```
 
-Después de clonar el repositorio, y agregar los archivos .bin al proyecto, proceda a 
-subirlo a la nube:
+Después de clonar el repositorio, agregar los archivos .bin al proyecto y actualizar el archivo `encoder.pkl` (ejecutando nuevamente el archivo `inference.py`), proceda a subirlo a la nube:
 
 ```bash
 git add .
