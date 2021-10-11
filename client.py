@@ -4,7 +4,7 @@ from io import BytesIO
 import argparse
 
 # URL = "http://127.0.0.1:8000/getPrediction"
-URL = "https://captcha-pytorch.herokuapp.com/getPrediction"
+URL = "https://captcha-resolver-josh.herokuapp.com/getPrediction"
 
 
 def getPrediction(FLAGS):
