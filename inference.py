@@ -40,26 +40,16 @@ def input_data(image_dir):
 
 def run_predict(FLAGS):
     # DECODIFICADOR DEL MENSAJE
-    filename_encoder = "encoder.pkl"
-    image_files = glob.glob(os.path.join(config.DATA_DIR, "*.jpg"))
-    targets_orig = [x.split("/")[-1][:-4] for x in image_files]
-    targets = [[c for c in x] for x in targets_orig]
-    targets_flat = [c for clist in targets for c in clist]
-    lbl_enc = preprocessing.LabelEncoder()
-    lbl_enc.fit(targets_flat)
-    pickle.dump(lbl_enc, open(filename_encoder, 'wb'))
-    encoder_model = pickle.load(open(filename_encoder, "rb"))
+    encoder_model = pickle.load(open(f"weights/{FLAGS.encoder}", "rb"))
 
      # CARGA E INFERENCIA DEL MODELO
     tensor_image = input_data(FLAGS.image)
-    NRO_CHARS = len(lbl_enc.classes_)
+    NRO_CHARS = len(encoder_model.classes_)
     model = CaptchaModel(NRO_CHARS)
-    model.load_state_dict(torch.load(FLAGS.model, map_location='cpu'))
+    model.load_state_dict(torch.load(f"weights/{FLAGS.model}", map_location='cpu'))
     #model = torch.load(FLAGS.model)
     model.eval().to("cpu")
     encoded_prediction, _ = model(tensor_image)
-
-    
     current_preds = decode_predictions(encoded_prediction, encoder_model)
     print(current_preds[0])
 
@@ -67,8 +57,13 @@ def run_predict(FLAGS):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--model", type=str, default="./model.bin", help="Pesos del modelo"
+        "--model", type=str, help="Pesos del modelo fecha/model.bin", required=True
     )
+
+    parser.add_argument(
+        "--encoder", type=str, help="Pesos del encoder fecha/model.bin", required=True
+    )
+
     parser.add_argument(
         "--image", type=str, default="./289682249H.jpg", help="Imagen de prueba"
     )

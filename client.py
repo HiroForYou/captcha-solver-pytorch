@@ -3,8 +3,8 @@ from PIL import Image
 from io import BytesIO
 import argparse
 
-#URL = "http://127.0.0.1:8000/getPrediction"
-URL = "https://captcha-solver-pytorch.herokuapp.com/getPrediction"
+# URL = "http://127.0.0.1:8000/getPrediction"
+URL = "https://captcha-pytorch.herokuapp.com/getPrediction"
 
 
 def getPrediction(FLAGS):
@@ -15,7 +15,7 @@ def getPrediction(FLAGS):
     response = requests.post(
         URL,
         files={"my_file": ("1.png", byte_io, "image/png")},
-        data={"model": FLAGS.model},
+        data={"model": FLAGS.model, "encoder": FLAGS.encoder},
     )
     print(response.json())
 
@@ -23,10 +23,15 @@ def getPrediction(FLAGS):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--model", type=str, default="model.bin", help="Pesos del modelo"
+        "--model", type=str, help="Pesos del modelo fecha/model.bin", required=True
     )
+
     parser.add_argument(
-        "--image", type=str, default="2cg58.png", help="Imagen de prueba"
+        "--encoder", type=str, help="Pesos del encoder fecha/model.bin", required=True
+    )
+
+    parser.add_argument(
+        "--image", type=str, help="Imagen de prueba", required=True
     )
     FLAGS, unparsed = parser.parse_known_args()
     getPrediction(FLAGS)

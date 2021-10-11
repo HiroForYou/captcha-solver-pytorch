@@ -2,11 +2,12 @@ import os
 import glob
 import torch
 import numpy as np
-
+from datetime import datetime
 import albumentations
 from sklearn import preprocessing
 from sklearn import model_selection
 from sklearn import metrics
+import pickle
 
 import config
 import dataset
@@ -50,6 +51,10 @@ def decode_predictions(preds, encoder):
 
 
 def run_training():
+    now = datetime.now()
+    namefolder = now.strftime("%d_%m_%Y-%H_%M_%S")
+    os.mkdir(f"./weights/{namefolder}")
+
     image_files = glob.glob(os.path.join(config.DATA_DIR, "*.jpg"))
     targets_orig = [x.split("/")[-1][:-4] for x in image_files]
     targets = [[c for c in x] for x in targets_orig]
@@ -119,10 +124,14 @@ def run_training():
         scheduler.step(test_loss)
 
         if (epoch + 1) % 10 == 0:
+            print(f"\n\nGuardando modelo -> Epoch {epoch + 1}\n\n")
             # Specify a path
-            PATH = "model.bin"
+
+            PATH_MODEL = f"./weights/{namefolder}/model_{epoch + 1}.bin"
+            PATH_ENCODER = f"./weights/{namefolder}/encoder_{epoch + 1}.pkl"
             # Save
-            torch.save(model.state_dict(), PATH)
+            torch.save(model.state_dict(), PATH_MODEL)
+            pickle.dump(lbl_enc, open(PATH_ENCODER, "wb"))
 
 
 if __name__ == "__main__":

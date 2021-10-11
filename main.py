@@ -16,7 +16,6 @@ from train import decode_predictions
 
 IMAGE_WIDTH = config.IMAGE_WIDTH
 IMAGE_HEIGHT = config.IMAGE_HEIGHT
-NRO_CHARS = 37
 
 app = FastAPI(
     title="Solver Captcha", description="Endpoint Solver Captcha", version="0.0.1"
@@ -30,9 +29,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-filename_encoder = "encoder.pkl"
-encoder_model = pickle.load(open(filename_encoder, "rb"))
-
 transform = transforms.Compose(
     [
         transforms.ToTensor(),
@@ -44,9 +40,11 @@ transform = transforms.Compose(
 )
 
 
-def run_predict(model_file, image_file):
+def run_predict(model_file, encoder_file, image_file):
+    encoder_model = pickle.load(open(f"weights/{encoder_file}", "rb"))
+    NRO_CHARS = len(encoder_model.classes_)
     model = CaptchaModel(NRO_CHARS)
-    model.load_state_dict(torch.load(model_file, map_location="cpu"))
+    model.load_state_dict(torch.load(f"weights/{model_file}", map_location="cpu"))
     model.eval().to("cpu")
 
     newStream = BytesIO(image_file.read())
@@ -69,9 +67,14 @@ def home():
 
 
 @app.post("/getPrediction")
-def _file_upload(my_file: UploadFile = File(...), model: str = Form(...)):
-    prediction = run_predict(model, my_file.file)
-    return {"response": prediction}
+def _file_upload(
+    my_file: UploadFile = File(...), encoder: str = Form(...), model: str = Form(...)
+):
+    try:
+        prediction = run_predict(model, encoder, my_file.file)
+        return {"response": prediction}
+    except:
+        return {"error": "actualice el despliegue"}
 
 
 if __name__ == "__main__":
