@@ -63,6 +63,8 @@ def run_training():
 
     lbl_enc = preprocessing.LabelEncoder()
     lbl_enc.fit(targets_flat)
+    PATH_ENCODER = f"./weights/{namefolder}/encoder.pkl"
+    pickle.dump(lbl_enc, open(PATH_ENCODER, "wb"))
     targets_enc = [lbl_enc.transform(x) for x in targets]
     targets_enc = np.array(targets_enc)
     targets_enc = targets_enc + 1
@@ -116,7 +118,7 @@ def run_training():
             current_preds = decode_predictions(vp, lbl_enc)
             valid_captcha_preds.extend(current_preds)
         combined = list(zip(test_targets_orig, valid_captcha_preds))
-        print(combined[:10])
+        #print(combined[:10])
         test_dup_rem = [remove_duplicates(c) for c in test_targets_orig]
         accuracy = metrics.accuracy_score(test_dup_rem, valid_captcha_preds)
         print(
@@ -136,9 +138,6 @@ def run_training():
             PATH_MODEL = f"./weights/{namefolder}/model_{epoch + 1}.bin"
             # Save
             torch.save(model.state_dict(), PATH_MODEL)
-
-    PATH_ENCODER = f"./weights/{namefolder}/encoder.pkl"
-    pickle.dump(lbl_enc, open(PATH_ENCODER, "wb"))
 
 
 if __name__ == "__main__":
