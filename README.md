@@ -4,7 +4,7 @@ Colocar el data de entrenamiento en una carpeta `input`.
 
 > Datasets
 
-- [Captcha Images](https://www.kaggle.com/aadhavvignesh/captcha-images/code)
+- [Captcha Images](https://www.kaggle.com/aadhavvignesh/captcha-images)
 
 > Entrenamiento:
 

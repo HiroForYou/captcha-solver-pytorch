@@ -38,11 +38,12 @@ transform = transforms.Compose(
 )
 
 
-def run_predict(model_file, encoder_file, image_file):
-    encoder_model = pickle.load(open(f"weights/{encoder_file}", "rb"))
+def run_predict(model_path, image_file):
+    encoderFolder = model_path.split("/")[0]
+    encoder_model = pickle.load(open(f"weights/{encoderFolder}/encoder.pkl", "rb"))
     NRO_CHARS = len(encoder_model.classes_)
     model = CaptchaModel(NRO_CHARS)
-    model.load_state_dict(torch.load(f"weights/{model_file}", map_location="cpu"))
+    model.load_state_dict(torch.load(f"weights/{model_path}", map_location="cpu"))
     model.eval().to("cpu")
 
     newStream = BytesIO(image_file.read())
@@ -65,11 +66,9 @@ def home():
 
 
 @app.post("/getPrediction")
-def _file_upload(
-    my_file: UploadFile = File(...), encoder: str = Form(...), model: str = Form(...)
-):
+def _file_upload(my_file: UploadFile = File(...), model_path: str = Form(...)):
     try:
-        prediction = run_predict(model, encoder, my_file.file)
+        prediction = run_predict(model_path, my_file.file)
         return {"response": prediction}
     except:
         return {"error": "actualice el despliegue"}

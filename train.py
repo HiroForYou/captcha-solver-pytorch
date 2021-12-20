@@ -51,11 +51,12 @@ def decode_predictions(preds, encoder):
 
 
 def run_training():
+    bestAcc = 0.0
     now = datetime.now()
     namefolder = now.strftime("%d_%m_%Y-%H_%M_%S")
     os.mkdir(f"./weights/{namefolder}")
 
-    image_files = glob.glob(os.path.join(config.DATA_DIR, "*.jpg"))
+    image_files = glob.glob(os.path.join(config.DATA_DIR, f"*.{config.DATATYPE_TRAIN}"))
     targets_orig = [x.split("/")[-1][:-4] for x in image_files]
     targets = [[c for c in x] for x in targets_orig]
     targets_flat = [c for clist in targets for c in clist]
@@ -121,6 +122,12 @@ def run_training():
         print(
             f"Epoch={epoch}, Train Loss={train_loss}, Test Loss={test_loss} Accuracy={accuracy}"
         )
+        if accuracy > bestAcc:
+            bestAcc = accuracy
+            print(f"\n\nGuardando el mejor modelo -> acc {bestAcc}")
+            # Save
+            torch.save(model.state_dict(), f"./weights/{namefolder}/best.bin")
+
         scheduler.step(test_loss)
 
         if (epoch + 1) % 10 == 0:
@@ -130,7 +137,7 @@ def run_training():
             # Save
             torch.save(model.state_dict(), PATH_MODEL)
 
-    PATH_ENCODER = f"./weights/encoder.pkl"
+    PATH_ENCODER = f"./weights/{namefolder}/encoder.pkl"
     pickle.dump(lbl_enc, open(PATH_ENCODER, "wb"))
 
 
