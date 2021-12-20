@@ -1,13 +1,8 @@
-import glob
-import os.path
-
-import torch
 import argparse
-from torchvision import transforms
 from PIL import Image
-import numpy as np
 import pickle
-from sklearn import preprocessing
+import torch
+from torchvision import transforms
 
 from model import CaptchaModel
 import config
@@ -40,14 +35,14 @@ def input_data(image_dir):
 
 def run_predict(FLAGS):
     # DECODIFICADOR DEL MENSAJE
-    encoder_model = pickle.load(open(f"weights/{FLAGS.encoder}", "rb"))
+    encoder_model = pickle.load(open(f"weights/encoder.pkl", "rb"))
 
-     # CARGA E INFERENCIA DEL MODELO
+    # CARGA E INFERENCIA DEL MODELO
     tensor_image = input_data(FLAGS.image)
     NRO_CHARS = len(encoder_model.classes_)
     model = CaptchaModel(NRO_CHARS)
-    model.load_state_dict(torch.load(f"weights/{FLAGS.model}", map_location='cpu'))
-    #model = torch.load(FLAGS.model)
+    model.load_state_dict(torch.load(f"weights/{FLAGS.model}", map_location="cpu"))
+    # model = torch.load(FLAGS.model)
     model.eval().to("cpu")
     encoded_prediction, _ = model(tensor_image)
     current_preds = decode_predictions(encoded_prediction, encoder_model)

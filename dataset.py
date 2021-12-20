@@ -1,10 +1,8 @@
 import albumentations
-import torch
-
-import numpy as np
-
 from PIL import Image
 from PIL import ImageFile
+import numpy as np
+import torch
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 

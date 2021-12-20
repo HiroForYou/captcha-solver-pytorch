@@ -4,9 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import torch
 from torchvision import transforms
 from PIL import Image
-import numpy as np
 import pickle
-from sklearn import preprocessing
 import uvicorn
 from io import BytesIO
 

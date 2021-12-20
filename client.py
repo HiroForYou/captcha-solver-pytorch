@@ -15,7 +15,7 @@ def getPrediction(FLAGS):
     response = requests.post(
         URL,
         files={"my_file": ("1.png", byte_io, "image/png")},
-        data={"model": FLAGS.model, "encoder": FLAGS.encoder},
+        data={"model": FLAGS.model},
     )
     print(response.json())
 
@@ -27,11 +27,7 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-        "--encoder", type=str, help="Pesos del encoder fecha/model.bin", required=True
-    )
-
-    parser.add_argument(
-        "--image", type=str, help="Imagen de prueba", required=True
+        "--image", type=str, help="Imagen de prueba .png", required=True
     )
     FLAGS, unparsed = parser.parse_known_args()
     getPrediction(FLAGS)

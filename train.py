@@ -3,7 +3,7 @@ import glob
 import torch
 import numpy as np
 from datetime import datetime
-import albumentations
+
 from sklearn import preprocessing
 from sklearn import model_selection
 from sklearn import metrics
@@ -126,12 +126,12 @@ def run_training():
         if (epoch + 1) % 10 == 0:
             print(f"\n\nGuardando modelo -> Epoch {epoch + 1}\n\n")
             # Specify a path
-
             PATH_MODEL = f"./weights/{namefolder}/model_{epoch + 1}.bin"
-            PATH_ENCODER = f"./weights/{namefolder}/encoder_{epoch + 1}.pkl"
             # Save
             torch.save(model.state_dict(), PATH_MODEL)
-            pickle.dump(lbl_enc, open(PATH_ENCODER, "wb"))
+
+    PATH_ENCODER = f"./weights/encoder.pkl"
+    pickle.dump(lbl_enc, open(PATH_ENCODER, "wb"))
 
 
 if __name__ == "__main__":
