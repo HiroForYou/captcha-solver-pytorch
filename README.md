@@ -45,6 +45,7 @@ heroku dyno:restart
 ```
 
 > Inferencia en la nube
+
 Finalmente para poder probar su modelo desplegado, ejecute el siguiente comando:
 ```bash
 python inferenceAPI.py --model FECHA/MODELO.bin --image 2cg58.png
