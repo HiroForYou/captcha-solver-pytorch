@@ -1,27 +1,23 @@
-import requests
-import json
-from PIL import Image
-import json
 import base64
 import io
+import json
 import pickle
+from PIL import Image
+import requests
 import torch
 
-image = Image.open("2cg58.png").convert("RGB")
+from config import API_ENDPOINT, IMAGE_TEST
+
+image = Image.open(IMAGE_TEST).convert("RGB")
 buffered = io.BytesIO()
 image.save(buffered, format="JPEG")
 img_str = base64.b64encode(buffered.getvalue())
-
 payload = {"image": img_str.decode()}
-
 payload = json.dumps(payload)
 
-API_ENDPOINT = "https://ri1o1mdiqd.execute-api.us-east-2.amazonaws.com/deploy/predict"
-
 # sending post request and saving response as response object
-r = requests.post(url=API_ENDPOINT, data=payload)
-
-predict = json.loads(r.text)
+response = requests.post(url=API_ENDPOINT, data=payload)
+prediction = json.loads(response.text)
 encoder_model = pickle.load(open("encoder.pkl", "rb"))
 
 
@@ -63,5 +59,5 @@ def decode_predictions(preds, encoder):
 
 
 print(
-    f"Imprimiendo predicción decodificada: {decode_predictions(torch.FloatTensor(predict), encoder_model)[0]}"
+    f"Imprimiendo predicción decodificada: {decode_predictions(torch.FloatTensor(prediction), encoder_model)[0]}"
 )

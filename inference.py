@@ -1,22 +1,14 @@
+import base64
+import io
 import json
 import logging
-import sys
 import os
-
-# import sagemaker_containers
+from PIL import Image
+import sys
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torchvision import transforms
-
-from PIL import Image
-
-# import numpy as np
-# import urllib.request
-# import pickle
-# from six import BytesIO
-import base64
-import io
 
 
 logger = logging.getLogger(__name__)
@@ -73,7 +65,7 @@ def model_fn(model_dir):
     model = Net(num_chars=37)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     logger.info("Cargando modelo.")
-    with open(os.path.join(model_dir, "model.pth"), "rb") as f:
+    with open(os.path.join(model_dir, "best.bin"), "rb") as f:
         model.load_state_dict(torch.load(f))
 
     model.to(device).eval()
@@ -102,7 +94,7 @@ def input_fn(request_body, content_type="application/json"):
 
 
 def predict_fn(input_data, model):
-    logger.info("Generando prediccion.")
+    logger.info("Generando predicción...")
     if torch.cuda.is_available():
         input_data = input_data.view(1, 3, 75, 300).cuda()
     else:
