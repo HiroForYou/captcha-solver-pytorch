@@ -27,9 +27,9 @@ logger.addHandler(logging.StreamHandler(sys.stdout))
 class Net(nn.Module):
     def __init__(self, num_chars):
         super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(3, 128, kernel_size=(3, 3), padding=(1, 1))
+        self.conv1 = nn.Conv2d(3, 128, kernel_size=(3, 6), padding=(1, 1))
         self.maxpool1 = nn.MaxPool2d(kernel_size=(2, 2))
-        self.conv2 = nn.Conv2d(128, 64, kernel_size=(3, 3), padding=(1, 1))
+        self.conv2 = nn.Conv2d(128, 64, kernel_size=(3, 6), padding=(1, 1))
         self.maxpool2 = nn.MaxPool2d(kernel_size=(2, 2))
         self.linear1 = nn.Linear(1152, 64)
         self.drop1 = nn.Dropout(0.2)
