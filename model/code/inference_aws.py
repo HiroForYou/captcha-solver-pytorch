@@ -18,6 +18,7 @@ from PIL import Image
 import base64
 import io
 
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler(sys.stdout))
