@@ -1,7 +1,5 @@
 import boto3
 import json
-import base64
-import io
 import os
 
 ENDPOINT_NAME = os.environ["ENDPOINT_NAME"]
