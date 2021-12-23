@@ -1,2 +1,3 @@
 input/*.png
 __pycache__/
+*.zip
