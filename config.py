@@ -1,2 +1,2 @@
-API_ENDPOINT = "https://ri1o1mdiqd.execute-api.us-east-2.amazonaws.com/deploy/predict"
+API_ENDPOINT = "https://lzshudjilj.execute-api.us-east-2.amazonaws.com/dev"
 IMAGE_TEST = "./2cg58.png"

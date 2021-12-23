@@ -62,13 +62,14 @@ class Net(nn.Module):
 
 
 def model_fn(model_dir):
-    model = Net(num_chars=37)
+    # 19 cambia en funcion del vocabulario, fijar esto al momento del deploy
+    model = Net(num_chars=19)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     logger.info("Cargando modelo.")
     with open(os.path.join(model_dir, "best.bin"), "rb") as f:
-        model.load_state_dict(torch.load(f))
+        model.load_state_dict(torch.load(f, map_location=device))
 
-    model.to(device).eval()
+    model.eval()
     logger.info("Modelo cargado!")
     return model
 

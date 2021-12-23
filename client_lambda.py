@@ -5,9 +5,11 @@ import pickle
 from PIL import Image
 import requests
 import torch
+import warnings
 
 from config import API_ENDPOINT, IMAGE_TEST
 
+warnings.filterwarnings('ignore')
 image = Image.open(IMAGE_TEST).convert("RGB")
 buffered = io.BytesIO()
 image.save(buffered, format="JPEG")
@@ -37,8 +39,8 @@ def remove_duplicates(x):
 
 
 def decode_predictions(preds, encoder):
-    print(preds.shape)
-    preds = preds.view(1, 1, 38)
+    #print(preds.shape)
+    #preds = preds.view(1, 1, 1440)
     preds = preds.permute(1, 0, 2)
     preds = torch.softmax(preds, 2)
     preds = torch.argmax(preds, 2)
